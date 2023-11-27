@@ -9,15 +9,15 @@ const Home: NextPage = () => {
   const [state, send] = useMachine(todoMachine, {
     services: {
       loadTodos: async () => {
-        // throw new Error("oh no...");
+        // throw new Error("oh no... can't load...");
         return Array.from(todos);
       },
       saveTodo: async (context, event) => {
-        // throw new Error("oh no...");
+        // throw new Error("oh no... can't add...");
         todos.add(context.createNewTodoFormInput);
       },
       deleteTodo: async (context, event) => {
-        // throw new Error("oh no...");
+        throw new Error("oh no... can't delete...");
         todos.delete(event.todo);
       },
     },
@@ -28,30 +28,52 @@ const Home: NextPage = () => {
       <MouseAction />
       <p>Todos Demo</p>
       <div>
+        <div>
+          ---------------------------Todo State---------------------------
+        </div>
         <pre>{JSON.stringify(state.value)}</pre>
         <pre>{JSON.stringify(state.context)}</pre>
         <div>
           ---------------------------Todo List---------------------------
         </div>
-        {state.context.todos.map((todo, i) => (
-          <div key={i} style={{ display: "flex", alignItems: "center" }}>
-            <p>{todo}</p>
-            <button onClick={() => send({ type: "Delete", todo })}>
-              Delete
-            </button>
-          </div>
-        ))}
-        <div>
-          {state.matches("Todos Loaded") && (
+        {state.matches("Todos Loaded") && (
+          <>
+            {state.context.todos.map((todo, i) => (
+              <div key={i} style={{ display: "flex", alignItems: "center" }}>
+                <p>{todo}</p>
+                <button onClick={() => send({ type: "Delete", todo })}>
+                  Delete
+                </button>
+              </div>
+            ))}
+          </>
+        )}
+
+        {state.matches("Todos Loaded") && (
+          <button
+            onClick={() => {
+              send({ type: "Creat New" });
+            }}
+          >
+            Create New Todo
+          </button>
+        )}
+
+        {state.matches("Deleting todo errored") && (
+          <>
+            <p>Something went wrong: {state.context.errorMessage}</p>
             <button
               onClick={() => {
-                send({ type: "Creat New" });
+                send({
+                  type: "Speed up",
+                });
               }}
             >
-              Create New Todo
+              Go back to List
             </button>
-          )}
-        </div>
+          </>
+        )}
+
         {state.matches("Creating New Todo.Showing form input") && (
           <form
             action="submit"

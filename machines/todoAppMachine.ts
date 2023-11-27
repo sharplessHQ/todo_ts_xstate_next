@@ -1,8 +1,26 @@
 import { actions, createMachine, assign } from "xstate";
 
+type EventType =
+  | {
+      type: "Creat New";
+    }
+  | {
+      type: "Form input changed";
+      value: string;
+    }
+  | {
+      type: "Submit";
+    }
+  | {
+      type: "Delete";
+      todo: string;
+    }
+  | {
+      type: "Speed up";
+    };
 export const todoMachine = createMachine(
   {
-    /** @xstate-layout N4IgpgJg5mDOIC5QBUD2FUAIC2BDAxgBYCWAdmAHQAyquEZUmaGsAxBuRWQG6oDWlZljxEylGnQZN0qWAh6p8uAC7FUpANoAGALradiUAAdZxVesMgAHogDMAJgCMFACwA2FwHZHADgCs9l62ni4ANCAAnoj29j4Ubm72fn5utsFJjo5+AL7Z4UI4BCScEvSkjEJsYABO1ajVFEYANioAZvXYFAUixeK0ZRUycgpK5pq6+pYmsGZqpJY2CI62zkk+AJyJ9rYevi4+4VEIKy4UPk6Osalabn5eufkyhaKclZilkKwAwtVgKpgAOTAAHdJkgQNNZhZwYsnLYKLZ1jd7B5glo0u5Doh1itXDdfD4Qlp7DcHiBukUxF0hu9+p8ACJgJpgZRgMHGUxjBaIRxuTwUewhBIuTJuYlaG5YpZaTYUPzrFyC5aeGLrHFkikvSg-P6qcqAkHSDAUADKhFQwKk7Wq2EwZCMAFdlKwAGIdO2kR3KTBEXDlSDsiGcubchD7OIuGW3fZ3ew4u5SzJafnbFyIvyeTw+XxaFwap49Kk6lRSIHAo2oU3my36622+1O1gmh0AI2wZkDkK5MMQngSFC0G1iLhSgUJnkTWmW8SRlyz+0zbnW+Ywz16FGLesYZYrptw3CkQnY6koCgE1NXhc4m9LhqEe4P+qE8lIvFGc30neD0NAiwAtLYWgUJs6yOH2grDouUo+DKZwJEkLjhku-grsIlLXr8Jb6ju94mvuh4yKwNR1A0zRtB0F5oVqG6YVuBrlrh+FPjIL5viW6ifroUzfvMPYID4tinOsGYrCcjjuLYUo4vCkZuI46zeBmKLyqha5UoyzJ0UexH1I0LTKHWlFqZwGksgRGCsYo7HjHoXHgl2IZ8dsbhyhK+xJHc6xJG4iYovy5yBMm3hqp4qlXpQplaYRHCnq+-CCAW6ERUyZnMRZIzWZxBj2TxoZ-pc8LJLYnmeCsAleROkQ8iSQEKdJ2yIhsCq5HkICkOgcCWJqvTcTM3a-og+XeHKfjFS4CllYigqJn4FCOFOATJLypUqnmrXdVSpTmbIvVQrxA1hvYk72PEC3FR4fiXIhbhhUl1D9NtsCYAAorU9SQLt-XWNVJ2Id5OJ9lO2Y+VVCBLuscqgYSAReQkOy3dRbwfBAn2OQdgSnA4yabCEsTEpioNqs4fKgeiCReWkCPrje2F3jIqM-t9YaRnimx3P4irxmEoOKQiy0eEihJxrYVNFrRt4MTIVYWla7oNsoDP7UzPh8mcgWeKBiHLY4iZZHEXn7Eutg+P4vg3etiXUTT2508aeGPoMGCK6GfLwsVWQyhrKtigcoMwSdwOeJdZvJIEosmSlUVOzlfVo0zDhzeKo18k443rL7RyXB4AqiX2KzpyF4fJZpUjKE8Om-CjMd7ZYZdGDyDj+TEkaZvJCnhMyrQKwgcZxEKKSgUHIrp9zLaoMoZfYA3Qdq+rwXtyA1TEFAhDdyKffuAPYF3PJPjc5aEDKIQ1VaOEhBgMvq+IPs4SwunFD90u2-D3viaN7PLfz6FLVAA */
+    /** @xstate-layout N4IgpgJg5mDOIC5QBUD2FUAIC2BDAxgBYCWAdmAHQAyquEZUmaGsAxBuRWQG6oDWlZljxEylGnQZN0qWAh6p8uAC7FUpANoAGALradiUAAdZxVesMgAHogDMAJgCMFACwA2FwHZHADgCs9l62ni4ANCAAnoj29j4Ubm72fn5utsFJjo5+AL7Z4UI4BCScEvSkjEJsYABO1ajVFEYANioAZvXYFAUixeK0ZRUycgpK5pq6+pYmsGZqpJY2CI62zkk+AJyJ9rYevi4+4VEIKy4UPk6Osalabn5eufkyhaKclZilkKwAwtVgKpgAOTAAHdJkgQNNZhZwYsnLYKLZ1jd7B5glo0u5Doh1itXDdfD4Qlp7DcHiBukUxF0hu9+p8ACJgJpgZRgMHGUxjBbYrSuTwOHy2Fx+QUuFzorFLLQ41zilyBfEbQVkikvSg-P6qcqAkHSDAUADKhFQwKk7Wq2EwZCMAFdlKwAGIdK2kW3KTBEXDlSDsiGcubchD7OLizZ3fzynF3SWZLSeCjbFyIvyeTw+XxaFwqp49KkalRSIHAvWoQ3G03a82W6121gGm0AI2wZl9kK5MMQngSFC0G1iwsS+1TMa0y3iSMuaaHXfW2Ywz16FHzWsYRZLhtw3CkQnY6koCgE1Pnuc4y8LuqEG632qE8lIvFGc30rf90NAiwAtLZeZt1o4u-Ynj9qmbiSj40pnAkSRij4PhuOs-hzsIlKnr8Bbamul4Gpu24yKwNR1A0zRtB0R7IWqS5oSuOrFlhOE3jId4PgW6jProUyvvMHYIKKFDrCmKwnI47i2JKOLwuKbiOOs3gpiifiznk5I5ihlCMsy1E7hw+73vwggqRR6ksrhGBMYoLHjHo7Hgm2AbcR+lzwskth3DJKyCusgExiSP6eOJ2yIhs6xZkpqqLkZml4QR9SNC0yhVmRC5UhFJmoGZj6sRM1kcjM7bvtEiJ8Y4bhwZ4IpSZmXmRIgwkpBQARdlofiXCkgGOEhSWcCl2rKE80W-BArBWLAygqJQuCtKy1QABRJFoWgAJSsGFyVMsZPV9bU9Q+tlfq5XZ+UILEfgJr4gH2Ah0rNZ4Mb-vYCKpP+A5NWVtgdSealrdRvXzv1nwGkYYCQJgNpGC++1vtYNUyfVo6wSKQqXNJoHVUsTjrBQaaZI4vbwZmfhvWSpDoHAlgreQHEQ1xh0Od49UE65-K+IiVVHFkFA41kXgpiK5xJJ472qdQ-SpfANmcYG8ojvdbijgzHjNYE7iCxRpSi5gACiW0DZTULU1DaP3WKSTwcEsu+MVkrwRjCm+GVF0oqkbgq4ubwfBAut5QbSsIiSfluCEsTEpiqPrH+8R+TjOzwQFLt5lR560TInsHQbYq8qGtz7HcF0uWEqOyQixXeH5E7CvYceoZqifrkaJpms6NbKCnkOLKVZwKpHYrF44t0inxgRwTi8O+M7oUGYuZ4YReMhXqlLf64sAfwi5WTSn5cGywcqPgfd6YB81o-JIElefRp8-i1TgZfhjsSZH5lWjgH9gxoF9UuQpPMyeip8UN1jA-SwH9D2l89aBmOqdQCzVCS9hkt5MO9MkSChCApTyuRchAA */
 
     tsTypes: {} as import("./todoAppMachine.typegen").Typegen0,
     schema: {
@@ -20,21 +38,7 @@ export const todoMachine = createMachine(
           data: void; // no need to save/return anything here
         };
       },
-      events: {} as
-        | {
-            type: "Creat New";
-          }
-        | {
-            type: "Form input changed";
-            value: string;
-          }
-        | {
-            type: "Submit";
-          }
-        | {
-            type: "Delete";
-            todo: string;
-          },
+      events: {} as EventType,
     },
     context: {
       todos: [] as string[],
@@ -111,12 +115,19 @@ export const todoMachine = createMachine(
         },
       },
 
-      "Deleting todo errored": {},
+      "Deleting todo errored": {
+        after: {
+          "3000": "Todos Loaded",
+        },
+
+        on: {
+          "Speed up": "Todos Loaded",
+        },
+      },
     },
   },
   {
     actions: {
-      // consoleLogTodos: (context, event) => alert(JSON.stringify(event.todos)),
       assignTodosToContext: assign((context, event) => {
         return { todos: event.data };
       }),
