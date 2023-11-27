@@ -55,7 +55,9 @@ export interface Typegen0 {
     assignTodosToContext: "done.invoke.Todo machine.Loading Todos:invocation[0]";
   };
   eventsCausingDelays: {};
-  eventsCausingGuards: {};
+  eventsCausingGuards: {
+    "Has todos": "done.invoke.Todo machine.Loading Todos:invocation[0]";
+  };
   eventsCausingServices: {
     deleteTodo: "Delete";
     loadTodos:

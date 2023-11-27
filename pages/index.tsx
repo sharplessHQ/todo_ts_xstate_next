@@ -3,7 +3,8 @@ import { todoMachine } from "@/machines/todoAppMachine";
 import { useMachine } from "@xstate/react";
 import type { NextPage } from "next";
 
-const todos = new Set<string>(["learn xstate", "learn maplibre"]);
+// const todos = new Set<string>(["learn xstate", "learn maplibre"]);
+const todos = new Set<string>([]);
 
 const Home: NextPage = () => {
   const [state, send] = useMachine(todoMachine, {
@@ -17,7 +18,7 @@ const Home: NextPage = () => {
         todos.add(context.createNewTodoFormInput);
       },
       deleteTodo: async (context, event) => {
-        throw new Error("oh no... can't delete...");
+        // throw new Error("oh no... can't delete...");
         todos.delete(event.todo);
       },
     },
@@ -36,10 +37,15 @@ const Home: NextPage = () => {
         <div>
           ---------------------------Todo List---------------------------
         </div>
-        {state.matches("Todos Loaded") && (
+        {/* {state.matches("Todos Loaded") && ( */
+        /*this one will always show input only without todolist when create new todo*/}
+        {Array.from(todos).length > 0 && (
           <>
             {state.context.todos.map((todo, i) => (
-              <div key={i} style={{ display: "flex", alignItems: "center" }}>
+              <div
+                key={i}
+                style={{ display: "flex", alignItems: "center", gap: "1rem" }}
+              >
                 <p>{todo}</p>
                 <button onClick={() => send({ type: "Delete", todo })}>
                   Delete

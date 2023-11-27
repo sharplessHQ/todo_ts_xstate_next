@@ -20,7 +20,7 @@ type EventType =
     };
 export const todoMachine = createMachine(
   {
-    /** @xstate-layout N4IgpgJg5mDOIC5QBUD2FUAIC2BDAxgBYCWAdmAHQAyquEZUmaGsAxBuRWQG6oDWlZljxEylGnQZN0qWAh6p8uAC7FUpANoAGALradiUAAdZxVesMgAHogDMAJgCMFACwA2FwHZHADgCs9l62ni4ANCAAnoj29j4Ubm72fn5utsFJjo5+AL7Z4UI4BCScEvSkjEJsYABO1ajVFEYANioAZvXYFAUixeK0ZRUycgpK5pq6+pYmsGZqpJY2CI62zkk+AJyJ9rYevi4+4VEIKy4UPk6Osalabn5eufkyhaKclZilkKwAwtVgKpgAOTAAHdJkgQNNZhZwYsnLYKLZ1jd7B5glo0u5Doh1itXDdfD4Qlp7DcHiBukUxF0hu9+p8ACJgJpgZRgMHGUxjBbYrSuTwOHy2Fx+QUuFzorFLLQ41zilyBfEbQVkikvSg-P6qcqAkHSDAUADKhFQwKk7Wq2EwZCMAFdlKwAGIdK2kW3KTBEXDlSDsiGcubchD7OLizZ3fzynF3SWZLSeCjbFyIvyeTw+XxaFwqp49KkalRSIHAvWoQ3G03a82W6121gGm0AI2wZl9kK5MMQngSFC0G1iwsS+1TMa0y3iSMuaaHXfW2Ywz16FHzWsYRZLhtw3CkQnY6koCgE1Pnuc4y8LuqEG632qE8lIvFGc30rf90NAiwAtLZeZt1o4u-Ynj9qmbiSj40pnAkSRij4PhuOs-hzsIlKnr8Bbamul4Gpu24yKwNR1A0zRtB0R7IWqS5oSuOrFlhOE3jId4PgW6jProUyvvMHYIKKFDrCmKwnI47i2JKOLwuKbiOOs3gpiifiznk5I5ihlCMsy1E7hw+73vwggqRR6ksrhGBMYoLHjHo7Hgm2AbcR+lzwskth3DJKyCusgExiSP6eOJ2yIhs6xZkpqqLkZml4QR9SNC0yhVmRC5UhFJmoGZj6sRM1kcjM7bvtEiJ8Y4bhwZ4IpSZmXmRIgwkpBQARdlofiXCkgGOEhSWcCl2rKE80W-BArBWLAygqJQuCtKy1QABRJFoWgAJSsGFyVMsZPV9bU9Q+tlfq5XZ+UILEfgJr4gH2Ah0rNZ4Mb-vYCKpP+A5NWVtgdSealrdRvXzv1nwGkYYCQJgNpGC++1vtYNUyfVo6wSKQqXNJoHVUsTjrBQaaZI4vbwZmfhvWSpDoHAlgreQHEQ1xh0Od49UE65-K+IiVVHFkFA41kXgpiK5xJJ472qdQ-SpfANmcYG8ojvdbijgzHjNYE7iCxRpSi5gACiW0DZTULU1DaP3WKSTwcEsu+MVkrwRjCm+GVF0oqkbgq4ubwfBAut5QbSsIiSfluCEsTEpiqPrH+8R+TjOzwQFLt5lR560TInsHQbYq8qGtz7HcF0uWEqOyQixXeH5E7CvYceoZqifrkaJpms6NbKCnkOLKVZwKpHYrF44t0inxgRwTi8O+M7oUGYuZ4YReMhXqlLf64sAfwi5WTSn5cGywcqPgfd6YB81o-JIElefRp8-i1TgZfhjsSZH5lWjgH9gxoF9UuQpPMyeip8UN1jA-SwH9D2l89aBmOqdQCzVCS9hkt5MO9MkSChCApTyuRchAA */
+    /** @xstate-layout N4IgpgJg5mDOIC5QBUD2FUAIC2BDAxgBYCWAdmAHQAyquEZUmaGsAxBuRWQG6oDWlZljxEylGnQZN0qWAh6p8uAC7FUpANoAGALradiUAAdZxVesMgAHogDMAJgCMFACwA2FwHZHADgCs9l62ni4ANCAAnoj29j4Ubm72fn5utsFJjo5+AL7Z4UI4BCScEvSkjEJsHJQKAhQFIsXitGUVMnIKSuaauhqOBkggJrBmaqSWNgi2iRRavn5aAT4AnD4r9uFRU37Ls56pnlrLblpujp45eSANRWLULVKVrGAATi+oLxRGADYqAGYfbD1GSFUQlB7laQseSkXhdMb6fSWYajCyDSaOWzOJIrRL2aYuXwuHybOyOFwUHxORyxVKnPxeXL5EGNO6VTClSCsADCLzAKkwADkwAB3JGDFHdCbRTEUWzLU72DzBLRpdykhDLLGuU6+HwhLT2U5M64s26cdmciCsAAiYG+YGUYHFxlMUvRiAVrk8Dh8thcfj9Lhcqo1jiOtlcIZcgV1Kz9JpuYMovP5qkhwpFUNQFAAyoRUCKpACXthMGQjABXZSsABigPLpCrykwRFw5UgLqGbrG0oQxLiIeODP8Ma1DLD4c8FHxLnlfk8nh8vi0LkTZuTFFTKikmezeYLRchJbLFerrFzlYARtgzF3Jb2PQh9m5ZusfAHEsTF2G5pG3AqNJLt++zLOuGCgk0W58juGaivuua4NwjwyOw6g1LC-CCBuUHbumjB7kIeZIShGAwnCO7qIiujIj2aKgJMAC0thaBQxzLOciSeLEXj7BqPhHJSCRJMGawAf44HCOaKYwfhQrwURiHIZCQjPG8HxfL8ygnsCEGspweG7gpMjEcpbRkZ0lE9HoNESnR4xPkGbELliWKEu4tgalqkYhmcyzeAuSo7JJkF3HaDpyap1RcJhdRJlB4WOqRqDkYoVnUQMrojO6DGIIxNKRsktgMv5WJ+ss9ieGGRqsf53n4vKKzLGuVzxWF9pJSpqGvO8nw-P8gK6VJm6JZFMipfCVG9LZWWog5uUIPiuwcW4PhuBca3hjGVWRIg5IpBQAT7IsNIpJVjghfplCjVIyggj1HxcrmRhgJAmCVkY972X2jj+YdcxrIG-o0r9bjVb9FBLpk4ZrQqAa2Jd0kUDdkJ3RBD18taViwMoKiULgfxOi8AAULFaFoACUrBtZwKOMGjWAY52M3dtlj4LTs9iQ7EwSrYcKw7VsNIAa4gSw7YgO+G4uRXKQ6BwJYNNgLRbP0dYeXnM4RUlT6vjypVYZ+BQ4ZZEB3jhixF2tThdylMl8B2ar83q-2Gy7Qg4ZcycWTFR4fg0sG0vW3pSN211LCYAAoupmMq3NP0xFGSQAbzAOOGD7sAbsOy+Bc9gVQk0yI5ulotJAcc5S7gQUg4WieMcISxIa6ru8sHHxPXFsJBVaTF7hslGVmQgV+zLvBqxQ5uCODL58VYTuwFcrp3nHj7AulzMiHm6GXBQ8mfmhbFg2Z7KCPauTGt05UiGnfBsvjiToGbFiynktrX3dw7wRxkYKZyVn87SY61IzFSyEceua0TgkndgJLmy51r+ylskQIH9aYdTGhgABfZmK7FiJkeuq4jTLzdkLRqh1io7HXv5VUqDrroNuvdGO5dHbxyfLEI2ThKr+31FoAW1U26HR2Lw4IAY272BltkIAA */
 
     tsTypes: {} as import("./todoAppMachine.typegen").Typegen0,
     schema: {
@@ -50,21 +50,27 @@ export const todoMachine = createMachine(
 
     states: {
       "Loading Todos": {
+        // on: {
+        //   "Loading todos failed": { target: "Loading Todos Errored" },
+        // },
         invoke: {
           src: "loadTodos",
-          onDone: {
-            target: "Todos Loaded",
-            // actions: "consoleLogTodos",
-            actions: "assignTodosToContext",
-          },
+          onDone: [
+            {
+              target: "Todos Loaded",
+
+              // actions: "consoleLogTodos",
+              actions: "assignTodosToContext",
+
+              cond: "Has todos",
+            },
+            { target: "Creating New Todo" },
+          ],
           onError: {
             target: "Loading Todos Errored",
             actions: "assignErrorToContext",
           },
         },
-        // on: {
-        //   "Loading todos failed": { target: "Loading Todos Errored" },
-        // },
       },
 
       "Loading Todos Errored": {},
@@ -127,6 +133,11 @@ export const todoMachine = createMachine(
     },
   },
   {
+    guards: {
+      "Has todos": (context, event) => {
+        return event.data.length > 0;
+      },
+    },
     actions: {
       assignTodosToContext: assign((context, event) => {
         return { todos: event.data };
