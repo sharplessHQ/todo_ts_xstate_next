@@ -1,53 +1,39 @@
-import MouseAction from "@/components/mouseAction";
+import { DupTodo } from "@/components/dupTodo";
+import { MouseAction } from "@/components/mouseAction";
 import { todoMachine } from "@/machines/todoAppMachine";
 import { useMachine } from "@xstate/react";
 import type { NextPage } from "next";
 
-// const todos = new Set<string>(["learn xstate", "learn maplibre"]);
-const todos = new Set<string>([]);
-
 const Home: NextPage = () => {
-  const [state, send] = useMachine(todoMachine, {
-    services: {
-      loadTodos: async () => {
-        // throw new Error("oh no... can't load...");
-        return Array.from(todos);
-      },
-      saveTodo: async (context, event) => {
-        // throw new Error("oh no... can't add...");
-        todos.add(context.createNewTodoFormInput);
-      },
-      deleteTodo: async (context, event) => {
-        // throw new Error("oh no... can't delete...");
-        todos.delete(event.todo);
-      },
-    },
-  });
+  const [machine, send] = useMachine(todoMachine, { devTools: true });
 
   return (
     <>
       <MouseAction />
+      <DupTodo />
       <p>Todos Demo</p>
       <div>
         <div>
           ---------------------------Todo State---------------------------
         </div>
-        <pre>{JSON.stringify(state.value)}</pre>
-        <pre>{JSON.stringify(state.context)}</pre>
+        <pre>{JSON.stringify(machine.value)}</pre>
+        <pre>{JSON.stringify(machine.context)}</pre>
         <div>
           ---------------------------Todo List---------------------------
         </div>
-        {/* {state.matches("Todos Loaded") && ( */
-        /*this one will always show input only without todolist when create new todo*/}
-        {Array.from(todos).length > 0 && (
+        {machine.matches("idle") && (
+          // {machine.context.todos.length > 0 && (
           <>
-            {state.context.todos.map((todo, i) => (
+            {machine.context.todos.map((todo, i) => (
               <div
                 key={i}
                 style={{ display: "flex", alignItems: "center", gap: "1rem" }}
               >
                 <p>{todo}</p>
-                <button onClick={() => send({ type: "Delete", todo })}>
+                <button
+                  disabled={!machine.can({ type: "DELETE", todo })}
+                  onClick={() => send({ type: "DELETE", todo })}
+                >
                   Delete
                 </button>
               </div>
@@ -55,19 +41,9 @@ const Home: NextPage = () => {
           </>
         )}
 
-        {state.matches("Todos Loaded") && (
-          <button
-            onClick={() => {
-              send({ type: "Creat New" });
-            }}
-          >
-            Create New Todo
-          </button>
-        )}
-
-        {state.matches("Deleting todo errored") && (
+        {machine.matches("deleting") && (
           <>
-            <p>Something went wrong: {state.context.errorMessage}</p>
+            <p>Something went wrong: {machine.context.errorMessage}</p>
             <button
               onClick={() => {
                 send({
@@ -80,19 +56,20 @@ const Home: NextPage = () => {
           </>
         )}
 
-        {state.matches("Creating New Todo.Showing form input") && (
+        {machine.matches("idle") && (
           <form
             action="submit"
             onSubmit={(e) => {
               e.preventDefault();
-              send({ type: "Submit" });
+              send({ type: "SAVE" });
             }}
           >
             <input
               type="text"
+              value={machine.context.createNewTodoFormInput}
               onChange={(e) =>
                 send({
-                  type: "Form input changed",
+                  type: "INPUT_CHANGE",
                   value: e.target.value,
                 })
               }
@@ -100,23 +77,6 @@ const Home: NextPage = () => {
             <button type="submit">Add</button>
           </form>
         )}
-        {/* <button
-          onClick={() =>
-            send({
-              type: "Todos loaded",
-              todos: ["learn xstate", "learn maplibre"],
-            })
-          }
-        >
-          Todos loaded
-        </button>
-        <button
-          onClick={() =>
-            send({ type: "Loading todos failed", errorMessage: "failed" })
-          }
-        >
-          Loading todos failed
-        </button> */}
       </div>
     </>
   );

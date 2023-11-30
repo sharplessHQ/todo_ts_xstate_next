@@ -3,78 +3,68 @@
 export interface Typegen0 {
   "@@xstate/typegen": true;
   internalEvents: {
-    "done.invoke.Todo machine.Creating New Todo.Saving Todo:invocation[0]": {
-      type: "done.invoke.Todo machine.Creating New Todo.Saving Todo:invocation[0]";
+    "done.invoke.Todo machine.deleting:invocation[0]": {
+      type: "done.invoke.Todo machine.deleting:invocation[0]";
       data: unknown;
       __tip: "See the XState TS docs to learn how to strongly type this.";
     };
-    "done.invoke.Todo machine.Deleting Todo:invocation[0]": {
-      type: "done.invoke.Todo machine.Deleting Todo:invocation[0]";
+    "done.invoke.Todo machine.loading:invocation[0]": {
+      type: "done.invoke.Todo machine.loading:invocation[0]";
       data: unknown;
       __tip: "See the XState TS docs to learn how to strongly type this.";
     };
-    "done.invoke.Todo machine.Loading Todos:invocation[0]": {
-      type: "done.invoke.Todo machine.Loading Todos:invocation[0]";
+    "done.invoke.Todo machine.saving:invocation[0]": {
+      type: "done.invoke.Todo machine.saving:invocation[0]";
       data: unknown;
       __tip: "See the XState TS docs to learn how to strongly type this.";
     };
-    "error.platform.Todo machine.Creating New Todo.Saving Todo:invocation[0]": {
-      type: "error.platform.Todo machine.Creating New Todo.Saving Todo:invocation[0]";
+    "error.platform.Todo machine.deleting:invocation[0]": {
+      type: "error.platform.Todo machine.deleting:invocation[0]";
       data: unknown;
     };
-    "error.platform.Todo machine.Deleting Todo:invocation[0]": {
-      type: "error.platform.Todo machine.Deleting Todo:invocation[0]";
+    "error.platform.Todo machine.loading:invocation[0]": {
+      type: "error.platform.Todo machine.loading:invocation[0]";
       data: unknown;
     };
-    "error.platform.Todo machine.Loading Todos:invocation[0]": {
-      type: "error.platform.Todo machine.Loading Todos:invocation[0]";
+    "error.platform.Todo machine.saving:invocation[0]": {
+      type: "error.platform.Todo machine.saving:invocation[0]";
       data: unknown;
     };
-    "xstate.after(3000)#Todo machine.Deleting todo errored": {
-      type: "xstate.after(3000)#Todo machine.Deleting todo errored";
+    "xstate.after(3000)#Todo machine.error": {
+      type: "xstate.after(3000)#Todo machine.error";
     };
     "xstate.init": { type: "xstate.init" };
   };
   invokeSrcNameMap: {
-    deleteTodo: "done.invoke.Todo machine.Deleting Todo:invocation[0]";
-    loadTodos: "done.invoke.Todo machine.Loading Todos:invocation[0]";
-    saveTodo: "done.invoke.Todo machine.Creating New Todo.Saving Todo:invocation[0]";
+    deleteTodo: "done.invoke.Todo machine.deleting:invocation[0]";
+    loadTodos: "done.invoke.Todo machine.loading:invocation[0]";
+    saveTodo: "done.invoke.Todo machine.saving:invocation[0]";
   };
   missingImplementations: {
     actions: never;
     delays: never;
     guards: never;
-    services: "deleteTodo" | "loadTodos" | "saveTodo";
+    services: never;
   };
   eventsCausingActions: {
     assignErrorToContext:
-      | "error.platform.Todo machine.Creating New Todo.Saving Todo:invocation[0]"
-      | "error.platform.Todo machine.Deleting Todo:invocation[0]"
-      | "error.platform.Todo machine.Loading Todos:invocation[0]";
-    assignFormInputToContext: "Form input changed";
-    assignTodosToContext: "done.invoke.Todo machine.Loading Todos:invocation[0]";
+      | "error.platform.Todo machine.deleting:invocation[0]"
+      | "error.platform.Todo machine.loading:invocation[0]"
+      | "error.platform.Todo machine.saving:invocation[0]";
+    assignFormInputToContext: "INPUT_CHANGE";
+    assignServiceTodoResult:
+      | "done.invoke.Todo machine.deleting:invocation[0]"
+      | "done.invoke.Todo machine.saving:invocation[0]";
+    assignTodosToContext: "done.invoke.Todo machine.loading:invocation[0]";
+    clearInput: "done.invoke.Todo machine.saving:invocation[0]";
   };
   eventsCausingDelays: {};
-  eventsCausingGuards: {
-    "Has todos": "done.invoke.Todo machine.Loading Todos:invocation[0]";
-  };
+  eventsCausingGuards: {};
   eventsCausingServices: {
-    deleteTodo: "Delete";
-    loadTodos:
-      | "done.invoke.Todo machine.Creating New Todo.Saving Todo:invocation[0]"
-      | "done.invoke.Todo machine.Deleting Todo:invocation[0]"
-      | "xstate.init";
-    saveTodo: "Submit";
+    deleteTodo: "DELETE";
+    loadTodos: "xstate.init";
+    saveTodo: "SAVE";
   };
-  matchesStates:
-    | "Creating New Todo"
-    | "Creating New Todo.Saving Todo"
-    | "Creating New Todo.Showing form input"
-    | "Deleting Todo"
-    | "Deleting todo errored"
-    | "Loading Todos"
-    | "Loading Todos Errored"
-    | "Todos Loaded"
-    | { "Creating New Todo"?: "Saving Todo" | "Showing form input" };
+  matchesStates: "deleting" | "error" | "idle" | "loading" | "saving";
   tags: never;
 }

@@ -2,17 +2,14 @@ import { actions, createMachine, assign } from "xstate";
 
 type EventType =
   | {
-      type: "Creat New";
+      type: "SAVE";
     }
   | {
-      type: "Form input changed";
+      type: "INPUT_CHANGE";
       value: string;
     }
   | {
-      type: "Submit";
-    }
-  | {
-      type: "Delete";
+      type: "DELETE";
       todo: string;
     }
   | {
@@ -20,134 +17,137 @@ type EventType =
     };
 export const todoMachine = createMachine(
   {
-    /** @xstate-layout N4IgpgJg5mDOIC5QBUD2FUAIC2BDAxgBYCWAdmAHQAyquEZUmaGsAxBuRWQG6oDWlZljxEylGnQZN0qWAh6p8uAC7FUpANoAGALradiUAAdZxVesMgAHogDMAJgCMFACwA2FwHZHADgCs9l62ni4ANCAAnoj29j4Ubm72fn5utsFJjo5+AL7Z4UI4BCScEvSkjEJsHJQKAhQFIsXitGUVMnIKSuaauhqOBkggJrBmaqSWNgi2iRRavn5aAT4AnD4r9uFRU37Ls56pnlrLblpujp45eSANRWLULVKVrGAATi+oLxRGADYqAGYfbD1GSFUQlB7laQseSkXhdMb6fSWYajCyDSaOWzOJIrRL2aYuXwuHybOyOFwUHxORyxVKnPxeXL5EGNO6VTClSCsADCLzAKkwADkwAB3JGDFHdCbRTEUWzLU72DzBLRpdykhDLLGuU6+HwhLT2U5M64s26cdmciCsAAiYG+YGUYHFxlMUvRiAVrk8Dh8thcfj9Lhcqo1jiOtlcIZcgV1Kz9JpuYMovP5qkhwpFUNQFAAyoRUCKpACXthMGQjABXZSsABigPLpCrykwRFw5UgLqGbrG0oQxLiIeODP8Ma1DLD4c8FHxLnlfk8nh8vi0LkTZuTFFTKikmezeYLRchJbLFerrFzlYARtgzF3Jb2PQh9m5ZusfAHEsTF2G5pG3AqNJLt++zLOuGCgk0W58juGaivuua4NwjwyOw6g1LC-CCBuUHbumjB7kIeZIShGAwnCO7qIiujIj2aKgJMAC0thaBQxzLOciSeLEXj7BqPhHJSCRJMGawAf44HCOaKYwfhQrwURiHIZCQjPG8HxfL8ygnsCEGspweG7gpMjEcpbRkZ0lE9HoNESnR4xPkGbELliWKEu4tgalqkYhmcyzeAuSo7JJkF3HaDpyap1RcJhdRJlB4WOqRqDkYoVnUQMrojO6DGIIxNKRsktgMv5WJ+ss9ieGGRqsf53n4vKKzLGuVzxWF9pJSpqGvO8nw-P8gK6VJm6JZFMipfCVG9LZWWog5uUIPiuwcW4PhuBca3hjGVWRIg5IpBQAT7IsNIpJVjghfplCjVIyggj1HxcrmRhgJAmCVkY972X2jj+YdcxrIG-o0r9bjVb9FBLpk4ZrQqAa2Jd0kUDdkJ3RBD18taViwMoKiULgfxOi8AAULFaFoACUrBtZwKOMGjWAY52M3dtlj4LTs9iQ7EwSrYcKw7VsNIAa4gSw7YgO+G4uRXKQ6BwJYNNgLRbP0dYeXnM4RUlT6vjypVYZ+BQ4ZZEB3jhixF2tThdylMl8B2ar83q-2Gy7Qg4ZcycWTFR4fg0sG0vW3pSN211LCYAAoupmMq3NP0xFGSQAbzAOOGD7sAbsOy+Bc9gVQk0yI5ulotJAcc5S7gQUg4WieMcISxIa6ru8sHHxPXFsJBVaTF7hslGVmQgV+zLvBqxQ5uCODL58VYTuwFcrp3nHj7AulzMiHm6GXBQ8mfmhbFg2Z7KCPauTGt05UiGnfBsvjiToGbFiynktrX3dw7wRxkYKZyVn87SY61IzFSyEceua0TgkndgJLmy51r+ylskQIH9aYdTGhgABfZmK7FiJkeuq4jTLzdkLRqh1io7HXv5VUqDrroNuvdGO5dHbxyfLEI2ThKr+31FoAW1U26HR2Lw4IAY272BltkIAA */
-
+    /** @xstate-layout N4IgpgJg5mDOIC5QBUD2FUAIC2BDAxgBYCWAdmAHQA2quEZUAxBuRWQG6oDWlaGOBEqxp0GCDqny4ALsVSkA2gAYAuspWJQAB1Sxis+ZpAAPRACYLFAGwAOAKx2A7DaV2rAFntWANCACeiA52FADMHo7uAIw2AJxmMZGRMQC+yb58WHhEZJQi9KRMYABORahFFFpUMgBmZdgUGQLZwrT5UOKknFIGiqrqRjp6PUamCGZWIRRmdpHu7kpKjh4h0SG+AQghNlZTdjFRMQmLjjGOqenomYI5bBBUYIwAkgByAAoAqsgA+gDCABIAQWeAHEAKL9JAgQb6OSkEaIRxmRwUOxKSJmGzRE5uFbrRAhQ6hGJWOLbRZmeYhc4gRpZISUYh3B4AZQBADVwaoBroYYZIaMrIkKEowu54hFIlZpj5-Ih7MEIjM3EpxnYQp5qbTrqxGfdGAARUEAGVByE5Gkh0OG-MCMUmdhs9gxSlO8XceIQNncFE8hwx6KUUTRNk1lya9IosFw7AYzHkDM63F4YbpNyjMYKHS6Mlh6gh2h51tAo0iDp9TilzlmkRCuNlCEcISUoSUXr2JKlUpDaRpKe1lHTseKpXKlRqdQafeaA+jYgk3VzfS5lsLsPhCCikxiixCjkbVhOjj2HsFwRJNhCMz3pdc7lD-FTrAgYHusgKcZ1iZ4k4f-Yoz9fOdEwXeQ82XAshjXG0N0bKZHEDFUVnRdxGw9JJvRrWZxiWMwXVie8rmnf8XzAN9ChKMoKiqaRaiKeotSIgDSKA7MejAi0IN5OFoIAWlLMwfRWKwRUSKwuzWeskQE6ZSViGxD2cAjwxuYcykYZktDASBMAAVy0fMoVXPli0QSIFhiFFTn2aY0UlWsPTcZEkiPMxd3VFZ3BSHsGIjVSikYYxYGkGRKFwappGKAAKJsFgASkYHyVIoooDKtKCTIQB1ImsDFHUcMyMTEswHPcHZLyPI9213NxUh7Uh0DgIxEvIblIOMkxEB4sx0RRL13DsUqPCxSIPR44JDgmjta1RL0rCUx9claBhWq49c+I8Xq5gGsSonkkb61RCywiWEIkUxeC7DMea-11MAVqLDrPQWCgTgsWJJVbWxHA9TyLIPSVbBFO0KUva6iMHAp7vSx6+IJF7TlOzEPDiRt3XrZGKBcR0MQpQVnC8i5f0YkiyKh9rRjFD1MVCCwEgG4lhMKsHfOSsnuIyzxkTFeC5mmNVRO++sCWRQMkJcWYRQpWrkiAA */
     tsTypes: {} as import("./todoAppMachine.typegen").Typegen0,
     schema: {
-      // events: {} as
-      //   | { type: "Todos loaded"; todos: string[] }
-      //   | { type: "Loading todos failed"; errorMessage: string },
       services: {} as {
         loadTodos: {
           data: string[];
         };
-        saveTodos: {
-          data: void; // no need to save/return anything here
+        saveTodo: {
+          data: string[]; // no need to save/return anything here
         };
         deleteTodo: {
-          data: void; // no need to save/return anything here
+          data: string[]; // no need to save/return anything here
         };
       },
       events: {} as EventType,
+      context: {} as {
+        todos: string[];
+        errorMessage: string | undefined;
+        createNewTodoFormInput: string;
+      },
     },
     context: {
-      todos: [] as string[],
-      errorMessage: undefined as string | undefined,
+      todos: [],
+      errorMessage: undefined,
       createNewTodoFormInput: "",
     },
     id: "Todo machine",
-    initial: "Loading Todos",
+    initial: "loading",
 
     states: {
-      "Loading Todos": {
-        // on: {
-        //   "Loading todos failed": { target: "Loading Todos Errored" },
-        // },
+      loading: {
         invoke: {
           src: "loadTodos",
           onDone: [
             {
-              target: "Todos Loaded",
-
-              // actions: "consoleLogTodos",
+              target: "idle",
               actions: "assignTodosToContext",
-
-              cond: "Has todos",
             },
-            { target: "Creating New Todo" },
           ],
           onError: {
-            target: "Loading Todos Errored",
+            target: "error",
             actions: "assignErrorToContext",
           },
         },
       },
-
-      "Loading Todos Errored": {},
-
-      "Todos Loaded": {
+      idle: {
         on: {
-          "Creat New": "Creating New Todo",
-          Delete: "Deleting Todo",
-        },
-      },
-
-      "Creating New Todo": {
-        initial: "Showing form input",
-        states: {
-          "Showing form input": {
-            on: {
-              "Form input changed": {
-                // target: "Showing form input",
-                // internal: true,
-                actions: "assignFormInputToContext",
-              },
-
-              Submit: "Saving Todo",
-            },
+          INPUT_CHANGE: {
+            actions: "assignFormInputToContext",
           },
-
-          "Saving Todo": {
-            invoke: {
-              src: "saveTodo",
-              onError: {
-                target: "Showing form input",
-                actions: "assignErrorToContext",
-              },
-              onDone: { target: "#Todo machine.Loading Todos" },
-            },
+          SAVE: {
+            target: "saving",
+          },
+          DELETE: {
+            target: "deleting",
           },
         },
       },
 
-      "Deleting Todo": {
+      saving: {
+        invoke: {
+          src: "saveTodo",
+          onError: {
+            target: "error",
+            actions: "assignErrorToContext",
+          },
+          onDone: {
+            target: "idle",
+            actions: ["assignServiceTodoResult", "clearInput"],
+          },
+        },
+      },
+
+      deleting: {
         invoke: {
           src: "deleteTodo",
           onError: {
-            target: "Deleting todo errored",
+            target: "error",
             actions: "assignErrorToContext",
           },
-          onDone: "Loading Todos",
+          onDone: {
+            target: "idle",
+            actions: ["assignServiceTodoResult"],
+          },
         },
       },
 
-      "Deleting todo errored": {
+      error: {
         after: {
-          "3000": "Todos Loaded",
+          "3000": "idle",
         },
 
         on: {
-          "Speed up": "Todos Loaded",
+          "Speed up": "idle",
         },
       },
     },
   },
   {
-    guards: {
-      "Has todos": (context, event) => {
-        return event.data.length > 0;
-      },
-    },
     actions: {
-      assignTodosToContext: assign((context, event) => {
+      assignTodosToContext: assign((ctx, event) => {
         return { todos: event.data };
       }),
-      assignErrorToContext: assign((context, event) => {
+      assignErrorToContext: assign((ctx, event) => {
         return { errorMessage: (event.data as Error).message };
       }),
-      assignFormInputToContext: assign((context, event) => {
+      assignFormInputToContext: assign((ctx, event) => {
         return { createNewTodoFormInput: event.value };
       }),
+      clearInput: assign({
+        createNewTodoFormInput: "",
+      }),
+      assignServiceTodoResult: assign((_ctx, event) => ({
+        todos: event.data,
+      })),
+    },
+    services: {
+      loadTodos: async () => {
+        // throw new Error("oh no... can't load...");
+        return [];
+      },
+      saveTodo: async (ctx, event) => {
+        // throw new Error("oh no... can't add...");
+        return [...ctx.todos, ctx.createNewTodoFormInput];
+      },
+      deleteTodo: async (ctx, event): Promise<string[]> => {
+        // throw new Error("oh no... can't delete...");
+        const filtered = ctx.todos.filter((todo) => todo !== event.todo);
+        if (filtered.length === ctx.todos.length) return Promise.reject();
+        return filtered;
+      },
     },
   }
 );

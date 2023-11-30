@@ -2,7 +2,7 @@ import { mouseActionMachine } from "@/machines/mouseActionMachine";
 import { useMachine } from "@xstate/react";
 import type { NextPage } from "next";
 
-const MouseAction: NextPage = () => {
+export const MouseAction: NextPage = () => {
   const [state, send] = useMachine(mouseActionMachine);
   return (
     <div>
@@ -14,5 +14,3 @@ const MouseAction: NextPage = () => {
     </div>
   );
 };
-
-export default MouseAction;
