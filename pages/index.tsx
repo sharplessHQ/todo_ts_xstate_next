@@ -1,14 +1,33 @@
 import { DupTodo } from "@/components/dupTodo";
 import { MouseAction } from "@/components/mouseAction";
-import { todoMachine } from "@/machines/todoAppMachine";
+import {
+  TodoMachineSend,
+  TodoMachine,
+  todoMachine,
+} from "@/machines/todoAppMachine";
 import { useMachine } from "@xstate/react";
 import type { NextPage } from "next";
+import { createContext, useContext } from "react";
+
+type MachineContextStore = {
+  machine: TodoMachine;
+  send: TodoMachineSend;
+};
+export const MachineContext = createContext<null | MachineContextStore>(null);
+
+export function useStore(): MachineContextStore {
+  const rootStore = useContext(MachineContext);
+  if (rootStore === null) {
+    throw new Error("store cannot be null, please add a context provider");
+  }
+  return rootStore;
+}
 
 const Home: NextPage = () => {
   const [machine, send] = useMachine(todoMachine, { devTools: true });
 
   return (
-    <>
+    <MachineContext.Provider value={{ machine, send }}>
       <MouseAction />
       <DupTodo />
       <p>Todos Demo</p>
@@ -74,11 +93,13 @@ const Home: NextPage = () => {
                 })
               }
             />
-            <button type="submit">Add</button>
+            <button disabled={!machine.can({ type: "SAVE" })} type="submit">
+              Add
+            </button>
           </form>
         )}
       </div>
-    </>
+    </MachineContext.Provider>
   );
 };
 

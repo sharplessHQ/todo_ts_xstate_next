@@ -47,19 +47,20 @@ export interface Typegen0 {
     services: never;
   };
   eventsCausingActions: {
+    assignDeleteTodo: "done.invoke.Todo machine.deleting:invocation[0]";
     assignErrorToContext:
       | "error.platform.Todo machine.deleting:invocation[0]"
       | "error.platform.Todo machine.loading:invocation[0]"
       | "error.platform.Todo machine.saving:invocation[0]";
     assignFormInputToContext: "INPUT_CHANGE";
-    assignServiceTodoResult:
-      | "done.invoke.Todo machine.deleting:invocation[0]"
-      | "done.invoke.Todo machine.saving:invocation[0]";
-    assignTodosToContext: "done.invoke.Todo machine.loading:invocation[0]";
+    assignSavedTodo: "done.invoke.Todo machine.saving:invocation[0]";
+    assignServiceTodoResult: "done.invoke.Todo machine.loading:invocation[0]";
     clearInput: "done.invoke.Todo machine.saving:invocation[0]";
   };
   eventsCausingDelays: {};
-  eventsCausingGuards: {};
+  eventsCausingGuards: {
+    canSave: "SAVE";
+  };
   eventsCausingServices: {
     deleteTodo: "DELETE";
     loadTodos: "xstate.init";
